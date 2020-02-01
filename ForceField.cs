@@ -112,7 +112,8 @@ public class ForceField : MonoBehaviour
     {
         if(changeType == ChangeType.MinMax)
         {
-
+            forceEffectFactor = changeFalloffParameters.max;
+            StartCoroutine(MinMaxFallOffRoutine());
         }
     }
 
@@ -136,7 +137,7 @@ public class ForceField : MonoBehaviour
                     yield return new WaitForFixedUpdate();
                     float currentChange = totalChange * (1 - changeFalloffParameters.changeDynamicCoeff) + changeBase;
                     ChangeEffectiveForce(forceEffectFactor + currentChange);
-
+                    totalChange -= currentChange;
                 }
                 ChangeEffectiveForce(changeFalloffParameters.min);
             }else if(forceEffectFactor == changeFalloffParameters.min)
@@ -149,7 +150,7 @@ public class ForceField : MonoBehaviour
                     yield return new WaitForFixedUpdate();
                     float currentChange = totalChange * (1 - changeFalloffParameters.changeDynamicCoeff) + changeBase;
                     ChangeEffectiveForce(forceEffectFactor + currentChange);
-
+                    totalChange -= currentChange;
                 }
                 ChangeEffectiveForce(changeFalloffParameters.max);
             }

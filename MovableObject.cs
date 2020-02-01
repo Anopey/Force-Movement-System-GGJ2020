@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MovableType { Wall, Player, Other}
+
 [RequireComponent(typeof(Collider2D))]
 public class MovableObject : MonoBehaviour
 {
@@ -15,6 +17,12 @@ public class MovableObject : MonoBehaviour
 
     [SerializeField]
     private float repellantForceFactor = 1f;
+
+    [SerializeField]
+    private float damageToPlayer = 0.25f;
+
+    [SerializeField]
+    private MovableType movableType = MovableType.Other;
 
     private Dictionary<GameObject, Vector2> affectingVectors = new Dictionary<GameObject, Vector2>(); //the affecting vectors are managed here via a registration system, which is accessed by the colliders.
     private List<GameObject> collisionForcers = new List<GameObject>();
@@ -129,6 +137,15 @@ public class MovableObject : MonoBehaviour
         affectingVectors[collider] = force * movementFactor;
         if (!collisionForcers.Contains(collider))
             collisionForcers.Add(collider);
+    }
+
+    #endregion
+
+    #region Movable Type and Type Interactions
+
+    public MovableType GetMovableType()
+    {
+        return movableType;
     }
 
     #endregion

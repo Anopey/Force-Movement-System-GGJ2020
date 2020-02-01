@@ -129,6 +129,7 @@ public class MovableObject : MonoBehaviour
         float repulsiveMultiplier = Mathf.Abs(90 - repulsiveAngle) / 90;
         movable.AddForce(collision.otherCollider.gameObject, ((baseCollision) * repellantForceFactor * GameProperties.GetBaseCollisionForce()) + (lastAggregate * aggregateMultiplier) * GameProperties.GetCollisionVelocityTransferrance() * repellantForceFactor + 
             baseRepulsiveFactor * repulsiveMultiplier * mirrorFactor);
+        HandleCollidedMovableType(collision, movable);
     }
 
     public void AddForce(GameObject collider, Vector2 force)
@@ -146,6 +147,22 @@ public class MovableObject : MonoBehaviour
     public MovableType GetMovableType()
     {
         return movableType;
+    }
+
+    private void HandleCollidedMovableType(Collision2D col, MovableObject collided)
+    {
+        switch (collided.GetMovableType())
+        {
+            case MovableType.Other:
+
+                break;
+            case MovableType.Player:
+                Player.ChangePlayerHP(-damageToPlayer);
+                break;
+            case MovableType.Wall:
+
+                break;
+        }
     }
 
     #endregion

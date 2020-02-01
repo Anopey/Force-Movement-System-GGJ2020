@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : ForceField
+public class RandomMover : ForceField
 {
+
+    private enum KeyStatus { increase, decrease, none}
+
+    private Dictionary<char, KeyStatus> keyStatuses = new Dictionary<char, KeyStatus>();
 
     [SerializeField]
     private float movementConstant = 0.066f;
@@ -17,31 +21,41 @@ public class PlayerController : ForceField
     [SerializeField]
     private int stopCoefficient = 2; //has to at least be 1.
 
+    [SerializeField]
+    [Range(0,1)]
+    private float sameFrameProbability = 0.98f;
+
     private MovableObject movableObject;
 
     private Dictionary<char, int> clickCounts = new Dictionary<char, int>();
 
-    [SerializeField]
-    private float[] directionalDockDistances = new float[8]; //starting from up, directions going clockwise.
 
-    [SerializeField]
-    private float[] directionalDockPlacementDistances = new float[8];
 
     private void Start()
     {
         clickCounts['W'] = 0;
         clickCounts['D'] = 0;
-
         movableObject = GetComponent<MovableObject>();
         affectedObjects.Add(movableObject);
         AffectedObjectAdded(movableObject);
+        keyStatuses['W'] = GetRandomKeyStatus();
+        keyStatuses['D'] = GetRandomKeyStatus();
     }
 
     private void FixedUpdate()
     {
-        
+
+        float rand = Random.Range(0f, 1f);
+        if(rand >= sameFrameProbability)
+        {
+            Debug.Log("yess");
+            keyStatuses['W'] = GetRandomKeyStatus();
+            keyStatuses['D'] = GetRandomKeyStatus();
+        }
+
         //up
-        if (Input.GetKey(KeyCode.W)){
+        if (keyStatuses['W'] == KeyStatus.increase)
+        {
             clickCounts['W']++;
             if (clickCounts['W'] < 0)
             {
@@ -50,7 +64,7 @@ public class PlayerController : ForceField
         }
 
         //right
-        if (Input.GetKey(KeyCode.D))
+        if (keyStatuses['D'] == KeyStatus.increase)
         {
             clickCounts['D']++;
             if (clickCounts['D'] < 0)
@@ -60,17 +74,17 @@ public class PlayerController : ForceField
         }
 
         //left
-        if (Input.GetKey(KeyCode.A))
+        if (keyStatuses['D'] == KeyStatus.decrease)
         {
             clickCounts['D']--;
-            if(clickCounts['D'] > 0)
+            if (clickCounts['D'] > 0)
             {
                 clickCounts['D'] -= (stopCoefficient - 1);
             }
         }
 
         //down
-        if (Input.GetKey(KeyCode.S))
+        if (keyStatuses['W'] == KeyStatus.decrease)
         {
             clickCounts['W']--;
             if (clickCounts['W'] > 0)
@@ -79,24 +93,17 @@ public class PlayerController : ForceField
             }
         }
 
-        //CTRL Dock
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            //try to dock.
-            Physics2D.Raycast(transform.position)
-        }
-
-        if(!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        if (keyStatuses['W'] == KeyStatus.none)
         {
             if (clickCounts['W'] > 0)
                 clickCounts['W'] = Mathf.Clamp(clickCounts['W'] - stopCoefficient, 0, maxHold);
             else if (clickCounts['W'] < 0)
             {
-                clickCounts['W'] = Mathf.Clamp(clickCounts['W'] + stopCoefficient, -maxHold, 0 );
+                clickCounts['W'] = Mathf.Clamp(clickCounts['W'] + stopCoefficient, -maxHold, 0);
             }
         }
 
-        if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+        if (keyStatuses['D'] == KeyStatus.none)
         {
             if (clickCounts['D'] > 0)
                 clickCounts['D'] = Mathf.Clamp(clickCounts['D'] - stopCoefficient, 0, maxHold);
@@ -107,8 +114,22 @@ public class PlayerController : ForceField
         }
         clickCounts['W'] = Mathf.Clamp(clickCounts['W'], -maxHold, maxHold);
         clickCounts['D'] = Mathf.Clamp(clickCounts['D'], -maxHold, maxHold);
-        ChangeForce(new Vector2((clickCounts['D'] / (float)maxHold * movementSmoothConstant * movementConstant),(clickCounts['W'] / (float)maxHold * movementSmoothConstant * movementConstant)));
+        ChangeForce(new Vector2((clickCounts['D'] / (float)maxHold * movementSmoothConstant * movementConstant), (clickCounts['W'] / (float)maxHold * movementSmoothConstant * movementConstant)));
         AffectedObjectAdded(movableObject);
     }
 
+    private KeyStatus GetRandomKeyStatus()
+    {
+        int rand  = Random.Range(0, 3);
+        switch (rand)
+        {
+            case 0:
+                return KeyStatus.decrease;
+            case 1:
+                return KeyStatus.none;
+            case 2:
+                return KeyStatus.increase;
+        }
+        throw new System.Exception("Nani");
+    }
 }

@@ -8,7 +8,7 @@ public class MovableObject : MonoBehaviour
 
     [SerializeField]
     [Range(0,1)]
-    private float mirrorFactor = 0.5f;
+    private float mirrorFactor = 1f;
 
     [SerializeField]
     private float movementFactor = 1;
@@ -115,11 +115,12 @@ public class MovableObject : MonoBehaviour
         float aggregateMultiplier = Mathf.Abs( 90 - angle) / 90;
         if (angle < 0)
             aggregateMultiplier *= -1;
-        //same thing for repulsive you factor.
-        Vector2 baseRepulsiveYouFactor = collision.otherCollider.GetComponent<MovableObject>().GetLastAggregateVelocityVector();
-        float repulsiveAngle = Vector2.Angle(baseRepulsiveYouFactor, baseCollision);
+        //same thing for repulsive factor.
+        Vector2 baseRepulsiveFactor = collision.otherCollider.GetComponent<MovableObject>().GetLastAggregateVelocityVector();
+        float repulsiveAngle = Vector2.Angle(baseRepulsiveFactor, baseCollision);
         float repulsiveMultiplier = Mathf.Abs(90 - repulsiveAngle) / 90;
-        movable.AddForce(collision.otherCollider.gameObject, ((baseCollision) * repellantForceFactor * GameProperties.GetBaseCollisionForce()) + (lastAggregate * aggregateMultiplier) * GameProperties.GetCollisionVelocityTransferrance() * repellantForceFactor);
+        movable.AddForce(collision.otherCollider.gameObject, ((baseCollision) * repellantForceFactor * GameProperties.GetBaseCollisionForce()) + (lastAggregate * aggregateMultiplier) * GameProperties.GetCollisionVelocityTransferrance() * repellantForceFactor + 
+            baseRepulsiveFactor * repulsiveMultiplier * mirrorFactor);
     }
 
     public void AddForce(GameObject collider, Vector2 force)

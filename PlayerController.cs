@@ -95,8 +95,7 @@ public class PlayerController : ForceField
         }
         clickCounts['W'] = Mathf.Clamp(clickCounts['W'], -maxHold, maxHold);
         clickCounts['D'] = Mathf.Clamp(clickCounts['D'], -maxHold, maxHold);
-        force.y = (clickCounts['W'] / (float)maxHold * movementSmoothConstant * movementConstant);
-        force.x = (clickCounts['D'] / (float)maxHold * movementSmoothConstant * movementConstant);
+        ChangeForce(new Vector2((clickCounts['D'] / (float)maxHold * movementSmoothConstant * movementConstant),(clickCounts['W'] / (float)maxHold * movementSmoothConstant * movementConstant)));
         AffectedObjectAdded(movableObject);
     }
 

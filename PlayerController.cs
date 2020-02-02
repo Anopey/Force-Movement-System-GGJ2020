@@ -27,10 +27,13 @@ public class PlayerController : ForceField
     [SerializeField]
     private Vector2[] directionalDockPlacementDistances = new Vector2[8];
 
+    [SerializeField]
+    private float dockingKeyPressCooldown = 0.5f;
 
     //docking
     private bool docked = false;
     private float oldMovementFactor;
+    private float currentDockingCooldown = 0f;
 
     private void Start()
     {
@@ -84,34 +87,43 @@ public class PlayerController : ForceField
             }
         }
 
-        //CTRL Dock
-        if (Input.GetKey(KeyCode.LeftControl))
+
+        if (currentDockingCooldown > 0)
         {
-            if (!docked)
+            currentDockingCooldown -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            //CTRL Dock
+            if (Input.GetKey(KeyCode.LeftControl))
             {
-                //try to dock.
-                for (int i = 0; i < 8; i++)
+                currentDockingCooldown = dockingKeyPressCooldown;
+                if (!docked)
                 {
-                    RaycastHit2D hit;
-                    hit = Physics2D.Raycast(transform.position, GetNormalizedVectorDirectionByID(i), directionalDockDistances[i], 1 << 10);
-                    if (hit.collider != null)
+                    //try to dock.
+                    for (int i = 0; i < 8; i++)
                     {
-                        //can dock.
-                        Debug.Log("docked");
-                        transform.position = hit.point + directionalDockPlacementDistances[i];
-                        docked = true;
-                        oldMovementFactor = movableObject.GetMovementFactor();
-                        movableObject.SetMovementFactor(0);
-                        break;
+                        RaycastHit2D hit;
+                        hit = Physics2D.Raycast(transform.position, GetNormalizedVectorDirectionByID(i), directionalDockDistances[i], 1 << 10);
+                        if (hit.collider != null)
+                        {
+                            //can dock.
+                            Debug.Log("docked");
+                            transform.position = hit.point + directionalDockPlacementDistances[i];
+                            docked = true;
+                            oldMovementFactor = movableObject.GetMovementFactor();
+                            movableObject.SetMovementFactor(0);
+                            break;
+                        }
                     }
                 }
-            }
-            else
-            {
-                Debug.Log("undocked");
-                //undock!
-                docked = false;
-                movableObject.SetMovementFactor(oldMovementFactor);
+                else
+                {
+                    Debug.Log("undocked");
+                    //undock!
+                    docked = false;
+                    movableObject.SetMovementFactor(oldMovementFactor);
+                }
             }
         }
 
@@ -140,6 +152,8 @@ public class PlayerController : ForceField
         AffectedObjectAdded(movableObject);
     }
 
+    #region Utility
+
     public static Vector2 GetNormalizedVectorDirectionByID(int id)
     {
         switch (id)
@@ -163,5 +177,7 @@ public class PlayerController : ForceField
         }
         throw new System.Exception("Invalid ID was passed");
     }
+
+    #endregion
 
 }

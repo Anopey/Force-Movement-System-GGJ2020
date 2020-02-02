@@ -13,6 +13,9 @@ public class RandomMover : ForceField
     private float movementConstant = 0.066f;
 
     [SerializeField]
+    private float movementRandomizationCooldown = 0.25f;
+
+    [SerializeField]
     private float movementSmoothConstant = 3;
 
     [SerializeField]
@@ -29,7 +32,7 @@ public class RandomMover : ForceField
 
     private Dictionary<char, int> clickCounts = new Dictionary<char, int>();
 
-
+    private float currentRandomizationCooldown = 0f;
 
     private void Start()
     {
@@ -44,12 +47,15 @@ public class RandomMover : ForceField
 
     private void FixedUpdate()
     {
-
-        float rand = Random.Range(0f, 1f);
-        if(rand >= sameFrameProbability)
+        if (currentRandomizationCooldown <= 0f)
         {
-            RandomizeMovement();
+            float rand = Random.Range(0f, 1f);
+            if (rand >= sameFrameProbability)
+            {
+                RandomizeMovement();
+            }
         }
+        currentRandomizationCooldown -= Time.fixedDeltaTime;
 
         //up
         if (keyStatuses['W'] == KeyStatus.increase)
@@ -133,8 +139,11 @@ public class RandomMover : ForceField
 
     public void RandomizeMovement()
     {
+        if (currentRandomizationCooldown > 0f)
+            return;
         Debug.Log("yess");
         keyStatuses['W'] = GetRandomKeyStatus();
         keyStatuses['D'] = GetRandomKeyStatus();
+        currentRandomizationCooldown = movementRandomizationCooldown;
     }
 }

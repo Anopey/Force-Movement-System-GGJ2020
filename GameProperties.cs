@@ -21,6 +21,9 @@ public class GameProperties : MonoBehaviour
     [Range(0, 1)]
     private float collisionVelocityTransferrance = 0.5f;
 
+    [SerializeField]
+    private float switchControllerCooldown = 1f;
+
     #region Unity and Instantiation
 
     private static GameProperties singleton;
@@ -66,6 +69,11 @@ public class GameProperties : MonoBehaviour
     public static float GetCollisionVelocityTransferrance()
     {
         return singleton.collisionVelocityTransferrance;
+    }
+
+    public static float GetSwitchControllerCooldown()
+    {
+        return singleton.switchControllerCooldown;
     }
 
     #endregion

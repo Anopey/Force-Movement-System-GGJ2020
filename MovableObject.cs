@@ -31,6 +31,9 @@ public class MovableObject : MonoBehaviour
 
     private RandomMover randomMover;
 
+    [SerializeField]
+    private AudioSource hitAudioSource;
+
     #region Unity and Instantiation
 
     // Start is called before the first frame update
@@ -154,6 +157,10 @@ public class MovableObject : MonoBehaviour
 
     private void HandleCollidedMovableType(Collision2D col, MovableObject collided)
     {
+        if(hitAudioSource != null)
+        {
+            hitAudioSource.Play();
+        }
         switch (collided.GetMovableType())
         {
             case MovableType.Other:

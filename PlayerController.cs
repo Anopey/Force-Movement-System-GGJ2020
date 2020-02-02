@@ -9,6 +9,9 @@ public class PlayerController : ForceField
     private float movementConstant = 0.066f;
 
     [SerializeField]
+    private bool canDock = true;
+
+    [SerializeField]
     private float movementSmoothConstant = 3;
 
     [SerializeField]
@@ -30,6 +33,9 @@ public class PlayerController : ForceField
     [SerializeField]
     private float dockingKeyPressCooldown = 0.5f;
 
+    [SerializeField]
+    private ChildMan childMan;
+
     //docking
     private bool docked = false;
     private float oldMovementFactor;
@@ -47,6 +53,13 @@ public class PlayerController : ForceField
 
     private void FixedUpdate()
     {
+
+        if (Player.CanSwitchPlayers() || Input.GetKey(KeyCode.V))
+        {
+            //SWITCH
+            Player.ReportSwitchPlayer();
+            childMan.ChangeControlled();
+        }
         
         //up
         if (Input.GetKey(KeyCode.W)){
@@ -87,44 +100,46 @@ public class PlayerController : ForceField
             }
         }
 
-
-        if (currentDockingCooldown > 0)
+        if (canDock)
         {
-            currentDockingCooldown -= Time.fixedDeltaTime;
-        }
-        else
-        {
-            //CTRL Dock
-            if (Input.GetKey(KeyCode.LeftControl))
+            if (currentDockingCooldown > 0)
             {
-                currentDockingCooldown = dockingKeyPressCooldown;
-                if (!docked)
+                currentDockingCooldown -= Time.fixedDeltaTime;
+            }
+            else
+            {
+                //CTRL Dock
+                if (Input.GetKey(KeyCode.LeftControl))
                 {
-                    //try to dock.
-                    for (int i = 0; i < 8; i++)
+                    currentDockingCooldown = dockingKeyPressCooldown;
+                    if (!docked)
                     {
-                        RaycastHit2D hit;
-                        hit = Physics2D.Raycast(transform.position, GetNormalizedVectorDirectionByID(i), directionalDockDistances[i], 1 << 10);
-                        if (hit.collider != null)
+                        //try to dock.
+                        for (int i = 0; i < 8; i++)
                         {
-                            //can dock.
-                            Debug.Log("docked");
-                            transform.position = hit.point + directionalDockPlacementDistances[i];
-                            docked = true;
-                            oldMovementFactor = movableObject.GetMovementFactor();
-                            movableObject.SetMovementFactor(0);
-                            OnDock();
-                            break;
+                            RaycastHit2D hit;
+                            hit = Physics2D.Raycast(transform.position, GetNormalizedVectorDirectionByID(i), directionalDockDistances[i], 1 << 10);
+                            if (hit.collider != null)
+                            {
+                                //can dock.
+                                Debug.Log("docked");
+                                transform.position = hit.point + directionalDockPlacementDistances[i];
+                                docked = true;
+                                oldMovementFactor = movableObject.GetMovementFactor();
+                                movableObject.SetMovementFactor(0);
+                                OnDock();
+                                break;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    Debug.Log("undocked");
-                    //undock!
-                    docked = false;
-                    movableObject.SetMovementFactor(oldMovementFactor);
-                    OnUnDock();
+                    else
+                    {
+                        Debug.Log("undocked");
+                        //undock!
+                        docked = false;
+                        movableObject.SetMovementFactor(oldMovementFactor);
+                        OnUnDock();
+                    }
                 }
             }
         }

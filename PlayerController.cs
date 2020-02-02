@@ -180,4 +180,10 @@ public class PlayerController : ForceField
 
     #endregion
 
+
+    //If you have forked this or downloaded it on Github, get rid of these as they are not needed.
+    #region Animation and Outside-Repo
+
+    #endregion
+
 }

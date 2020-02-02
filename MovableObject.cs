@@ -114,7 +114,7 @@ public class MovableObject : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         MovableObject movable = collision.gameObject.GetComponent<MovableObject>();
-        if (movable == null)
+        if (movable == null || collision.otherCollider.GetComponent<MovableObject>() == null)
             return;
         Vector2 pos = transform.position;
         Vector2 collidedPos = collision.transform.position;

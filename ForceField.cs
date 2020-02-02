@@ -28,6 +28,8 @@ public class ForceField : MonoBehaviour
     [SerializeField]
     private ChangeFalloffParameters changeFalloffParameters;
 
+    [SerializeField]
+    private List<MovableObject> ignoredObjects = new List<MovableObject>();
 
     protected List<MovableObject> affectedObjects = new List<MovableObject>();
 
@@ -39,7 +41,7 @@ public class ForceField : MonoBehaviour
             return;
         Debug.Log("Force field enter");
         MovableObject movable = collision.collider.GetComponent<MovableObject>();
-        if (movable == null)
+        if (movable == null || ignoredObjects.Contains(movable))
             return;
         affectedObjects.Add(movable);
         AffectedObjectAdded(movable);
@@ -51,7 +53,7 @@ public class ForceField : MonoBehaviour
             return;
         Debug.Log("Force field exit");
         MovableObject movable = collision.collider.GetComponent<MovableObject>();
-        if (movable == null)
+        if (movable == null || ignoredObjects.Contains(movable))
             return;
         affectedObjects.Remove(movable);
         AffectedObjectRemoved(movable);

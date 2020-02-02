@@ -25,7 +25,12 @@ public class PlayerController : ForceField
     private float[] directionalDockDistances = new float[8]; //starting from up, directions going clockwise.
 
     [SerializeField]
-    private float[] directionalDockPlacementDistances = new float[8];
+    private Vector2[] directionalDockPlacementDistances = new Vector2[8];
+
+
+    //docking
+    private bool docked = false;
+    private float oldMovementFactor;
 
     private void Start()
     {
@@ -82,13 +87,27 @@ public class PlayerController : ForceField
         //CTRL Dock
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            //try to dock.
-            RaycastHit2D hit;
-            hit = Physics2D.Raycast(transform.position, Vector2.up, directionalDockDistances[0], 1 << 10);
-            if(hit.collider != null)
+            if (!docked)
             {
-                //can dock.
-
+                //try to dock.
+                RaycastHit2D hit;
+                hit = Physics2D.Raycast(transform.position, Vector2.up, directionalDockDistances[0], 1 << 10);
+                if (hit.collider != null)
+                {
+                    //can dock.
+                    Debug.Log("docked");
+                    transform.position = hit.point + directionalDockPlacementDistances[0];
+                    docked = true;
+                    oldMovementFactor = movableObject.GetMovementFactor();
+                    movableObject.SetMovementFactor(0);
+                }
+            }
+            else
+            {
+                Debug.Log("undocked");
+                //undock!
+                docked = false;
+                movableObject.SetMovementFactor(oldMovementFactor);
             }
         }
 

@@ -167,4 +167,18 @@ public class MovableObject : MonoBehaviour
 
     #endregion
 
+    #region Various Getters and Setters
+
+    public float GetMovementFactor()
+    {
+        return movementFactor;
+    }
+
+    public void SetMovementFactor(float newFactor)
+    {
+        movementFactor = newFactor;
+    }
+
+    #endregion
+
 }

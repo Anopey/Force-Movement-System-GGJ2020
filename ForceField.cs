@@ -121,9 +121,9 @@ public class ForceField : MonoBehaviour
 
     private IEnumerator MinMaxFallOffRoutine()
     {
+        float currentSeconds = changeFalloffParameters.initialStartChangeSeconds;
         while (gameObject != null)
         {
-            float currentSeconds = changeFalloffParameters.changeSeconds;
             while (currentSeconds > 0)
             {
                 currentSeconds -= Time.fixedDeltaTime;
@@ -160,6 +160,7 @@ public class ForceField : MonoBehaviour
             {
                 Debug.LogError("This wasn't supposed to happen");
             }
+            currentSeconds = changeFalloffParameters.changeSeconds;
         }
     }
 
@@ -198,6 +199,7 @@ public class ChangeFalloffParameters
 {
     public float min, max;
     public float changeSeconds = 2f;
+    public float initialStartChangeSeconds = 0;
 
     [Range(0,1)]
     public float changeDynamicCoeff = 0.98f;

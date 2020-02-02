@@ -83,7 +83,13 @@ public class PlayerController : ForceField
         if (Input.GetKey(KeyCode.LeftControl))
         {
             //try to dock.
-            Physics2D.Raycast(transform.position)
+            RaycastHit2D hit;
+            hit = Physics2D.Raycast(transform.position, Vector2.up, directionalDockDistances[0], 1 << 10);
+            if(hit.collider != null)
+            {
+                //can dock.
+
+            }
         }
 
         if(!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))

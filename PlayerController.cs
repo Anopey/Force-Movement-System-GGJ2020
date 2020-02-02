@@ -54,7 +54,7 @@ public class PlayerController : ForceField
     private void FixedUpdate()
     {
 
-        if (Player.CanSwitchPlayers() || Input.GetKey(KeyCode.V))
+        if (Player.CanSwitchPlayers() && Input.GetKey(KeyCode.V))
         {
             //SWITCH
             Player.ReportSwitchPlayer();

@@ -56,6 +56,10 @@ public class MovableObject : MonoBehaviour
         {
             aggregateVector += vector;
         }
+        if(aggregateVector.magnitude > GameProperties.GetMaximumVelocityMagnitude())
+        {
+            aggregateVector = aggregateVector.normalized * GameProperties.GetMaximumVelocityMagnitude();
+        }
         rigidBody.MovePosition(new Vector2(transform.position.x, transform.position.y) + aggregateVector * GameProperties.GetMovementTweakConstant() * movementFactor);
         lastAggregate = aggregateVector;
 

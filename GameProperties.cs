@@ -24,6 +24,9 @@ public class GameProperties : MonoBehaviour
     [SerializeField]
     private float switchControllerCooldown = 1f;
 
+    [SerializeField]
+    private float maximumVelocityMagnitude = 5f;
+
     #region Unity and Instantiation
 
     private static GameProperties singleton;
@@ -74,6 +77,11 @@ public class GameProperties : MonoBehaviour
     public static float GetSwitchControllerCooldown()
     {
         return singleton.switchControllerCooldown;
+    }
+
+    public static float GetMaximumVelocityMagnitude()
+    {
+        return singleton.maximumVelocityMagnitude;
     }
 
     #endregion

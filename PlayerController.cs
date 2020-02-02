@@ -113,6 +113,7 @@ public class PlayerController : ForceField
                             docked = true;
                             oldMovementFactor = movableObject.GetMovementFactor();
                             movableObject.SetMovementFactor(0);
+                            OnDock();
                             break;
                         }
                     }
@@ -123,6 +124,7 @@ public class PlayerController : ForceField
                     //undock!
                     docked = false;
                     movableObject.SetMovementFactor(oldMovementFactor);
+                    OnUnDock();
                 }
             }
         }
@@ -183,6 +185,16 @@ public class PlayerController : ForceField
 
     //If you have forked this or downloaded it on Github, get rid of these as they are not needed.
     #region Animation and Outside-Repo
+
+    private void OnDock()
+    {
+        ShipAnimationController.ChangeHands(false);
+    }
+
+    private void OnUnDock()
+    {
+        ShipAnimationController.ChangeHands(true);
+    }
 
     #endregion
 

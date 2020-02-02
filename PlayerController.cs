@@ -90,16 +90,20 @@ public class PlayerController : ForceField
             if (!docked)
             {
                 //try to dock.
-                RaycastHit2D hit;
-                hit = Physics2D.Raycast(transform.position, Vector2.up, directionalDockDistances[0], 1 << 10);
-                if (hit.collider != null)
+                for (int i = 0; i < 8; i++)
                 {
-                    //can dock.
-                    Debug.Log("docked");
-                    transform.position = hit.point + directionalDockPlacementDistances[0];
-                    docked = true;
-                    oldMovementFactor = movableObject.GetMovementFactor();
-                    movableObject.SetMovementFactor(0);
+                    RaycastHit2D hit;
+                    hit = Physics2D.Raycast(transform.position, GetNormalizedVectorDirectionByID(i), directionalDockDistances[i], 1 << 10);
+                    if (hit.collider != null)
+                    {
+                        //can dock.
+                        Debug.Log("docked");
+                        transform.position = hit.point + directionalDockPlacementDistances[i];
+                        docked = true;
+                        oldMovementFactor = movableObject.GetMovementFactor();
+                        movableObject.SetMovementFactor(0);
+                        break;
+                    }
                 }
             }
             else
@@ -134,6 +138,30 @@ public class PlayerController : ForceField
         clickCounts['D'] = Mathf.Clamp(clickCounts['D'], -maxHold, maxHold);
         ChangeForce(new Vector2((clickCounts['D'] / (float)maxHold * movementSmoothConstant * movementConstant),(clickCounts['W'] / (float)maxHold * movementSmoothConstant * movementConstant)));
         AffectedObjectAdded(movableObject);
+    }
+
+    public static Vector2 GetNormalizedVectorDirectionByID(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                return Vector2.up;
+            case 1:
+                return new Vector2(1, 1).normalized;
+            case 2:
+                return Vector2.right;
+            case 3:
+                return new Vector2(1, -1).normalized;
+            case 4:
+                return Vector2.down;
+            case 5:
+                return new Vector2(-1, -1).normalized;
+            case 6:
+                return Vector2.left;
+            case 7:
+                return new Vector2(-1, 1).normalized;
+        }
+        throw new System.Exception("Invalid ID was passed");
     }
 
 }

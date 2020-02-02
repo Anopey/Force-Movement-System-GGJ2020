@@ -29,12 +29,15 @@ public class MovableObject : MonoBehaviour
     private Rigidbody2D rigidBody;
     private Vector2 lastAggregate;
 
+    private RandomMover randomMover;
+
     #region Unity and Instantiation
 
     // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        randomMover = GetComponent<RandomMover>();
     }
 
     List<GameObject> toBeRemoved = new List<GameObject>();
@@ -160,7 +163,10 @@ public class MovableObject : MonoBehaviour
                 Player.ChangePlayerHP(-damageToPlayer);
                 break;
             case MovableType.Wall:
-
+                if(randomMover != null)
+                {
+                    randomMover.RandomizeMovement();
+                }
                 break;
         }
     }

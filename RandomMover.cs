@@ -48,9 +48,7 @@ public class RandomMover : ForceField
         float rand = Random.Range(0f, 1f);
         if(rand >= sameFrameProbability)
         {
-            Debug.Log("yess");
-            keyStatuses['W'] = GetRandomKeyStatus();
-            keyStatuses['D'] = GetRandomKeyStatus();
+            RandomizeMovement();
         }
 
         //up
@@ -131,5 +129,12 @@ public class RandomMover : ForceField
                 return KeyStatus.increase;
         }
         throw new System.Exception("Nani");
+    }
+
+    public void RandomizeMovement()
+    {
+        Debug.Log("yess");
+        keyStatuses['W'] = GetRandomKeyStatus();
+        keyStatuses['D'] = GetRandomKeyStatus();
     }
 }

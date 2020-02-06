@@ -54,6 +54,34 @@ public class PlayerController : ForceField
     private void FixedUpdate()
     {
 
+        //minigame
+        if (Input.GetKey(KeyCode.R))
+        {
+            Player.ReportKeyPress(KeyCode.R);
+        }
+
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            Player.ReportKeyPress(KeyCode.UpArrow);
+        }
+
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            Player.ReportKeyPress(KeyCode.RightArrow);
+        }
+
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            Player.ReportKeyPress(KeyCode.DownArrow);
+        }
+
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            Player.ReportKeyPress(KeyCode.LeftArrow);
+        }
+
+
+
         if (Player.CanSwitchPlayers() && Input.GetKey(KeyCode.V))
         {
             //SWITCH

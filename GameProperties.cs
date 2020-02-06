@@ -27,6 +27,15 @@ public class GameProperties : MonoBehaviour
     [SerializeField]
     private float maximumVelocityMagnitude = 5f;
 
+    [SerializeField]
+    private int minimumRandomChecks = 5;
+
+    [SerializeField]
+    private int maximumRandomChecks = 15;
+
+    [SerializeField]
+    private float checkTime = 2f;
+
     #region Unity and Instantiation
 
     private static GameProperties singleton;
@@ -82,6 +91,21 @@ public class GameProperties : MonoBehaviour
     public static float GetMaximumVelocityMagnitude()
     {
         return singleton.maximumVelocityMagnitude;
+    }
+
+    public static int GetMinimumRandomChecks()
+    {
+        return singleton.minimumRandomChecks;
+    }
+
+    public static int GetMaximumRandomChecks()
+    {
+        return singleton.maximumRandomChecks;
+    }
+
+    public static float GetCheckTime()
+    {
+        return singleton.checkTime;
     }
 
     #endregion

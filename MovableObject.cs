@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MovableType { Wall, Player, Other}
+public enum MovableType { Wall, Player, Background, Other}
 
 [RequireComponent(typeof(Collider2D))]
 public class MovableObject : MonoBehaviour

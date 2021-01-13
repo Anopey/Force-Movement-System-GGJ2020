@@ -16,6 +16,14 @@
 
  The game features a custom 2D physics system, allowing for fine-tuning of character and enemy movement. This also allows for the setting up of customizable bounciness on the walls and enemies, and the sporadic push and pull caused by blood-flow.
 
+### Custom Player Controller:
+
+ The game has a custom player controller integrated with the aforementioned physics system to allow for fluid, force-based movement. This creates the feel of really swimming in a bloodstream.
+ 
+### Game Logic:
+
+ The game logic includes: Enemy movement, walls, victory conditions, viruses keystroke challenges, docking the ship, scene management, collision detection (Unity), HP, etc. 
+
 # Credits
 
 Art and Sound:
@@ -27,3 +35,4 @@ Code and Technical Details:
 
 UX and Project Management:
 - Mert Tuğkan Uluşal
+

@@ -20,9 +20,9 @@
 
  The game has a custom player controller integrated with the aforementioned physics system to allow for fluid, force-based movement. This creates the feel of really swimming in a bloodstream.
  
-### Game Logic:
+### Additional Game Logic:
 
- The game logic includes: Enemy movement, walls, victory conditions, viruses keystroke challenges, docking the ship, scene management, collision detection (Unity), HP, etc. 
+ The game logic includes: Enemy movement, enemy collider adjustment depending on animation, walls & bounciness, victory conditions, virus keystroke challenges, docking the ship, scene management, collision detection (Unity), HP, player distance from submarine after getting out, input, etc. 
 
 # Credits
 
